@@ -77,6 +77,8 @@ equal.addEventListener("click", () => {
   let operand1 = text.substring(0, operatorIndex).trim();
   let operand2 = text.substring(operatorIndex + 1).trim();
 
+  if (operand1 === "" || operand2 === "") return;
+
   operate(operator, operand1, operand2);
 });
 
