@@ -27,9 +27,9 @@ function operate(operator, num1, num2) {
       break;
     case "/":
       if (b === 0) {
-        result = "Can't divide by 0!";
+        output.textContent = "Can't divide by 0!";
         setTimeout(() => clear.click(), 1000);
-        break;
+        return;
       }
       result = a / b;
       break;
