@@ -6,6 +6,7 @@ const numbersDiv = document.querySelector("#numbers-panel");
 const equal = document.querySelector("#equal");
 const clear = document.querySelector("#clear");
 const point = document.querySelector("#point");
+const backspace = document.querySelector("#backspace");
 
 let operators = [...operatorsDiv.querySelectorAll("button")];
 let numbers = [...numbersDiv.querySelectorAll("button")];
@@ -84,6 +85,13 @@ equal.addEventListener("click", () => {
 
 clear.addEventListener("click", () => {
   output.textContent = "";
+});
+
+backspace.addEventListener("click", () => {
+  let text = output.textContent;
+  if (text !== "") {
+    output.textContent = text.slice(0, -1);
+  }
 });
 
 point.addEventListener("click", () => {
