@@ -1,52 +1,45 @@
-let output = document.querySelector("#output");
+const output = document.querySelector("#output");
 
-let operatorsDiv = document.querySelector("#operators-panel");
-let numbersDiv = document.querySelector("#numbers-panel");
+const operatorsDiv = document.querySelector("#operators-panel");
+const numbersDiv = document.querySelector("#numbers-panel");
 
-let equal = document.querySelector("#equal");
-let clear = document.querySelector("#clear");
-let point = document.querySelector("#point");
+const equal = document.querySelector("#equal");
+const clear = document.querySelector("#clear");
+const point = document.querySelector("#point");
 
 let operators = [...operatorsDiv.querySelectorAll("button")];
 let numbers = [...numbersDiv.querySelectorAll("button")];
 
-function add(a, b) {
-  let result = parseFloat(a) + parseFloat(b);
-  output.textContent = result;
-}
-function subtract(a, b) {
-  let result = parseFloat(a) - parseFloat(b);
-  output.textContent = result;
-}
-function multiply(a, b) {
-  let result = parseFloat(a) * parseFloat(b);
-  output.textContent = result;
-}
-function divide(a, b) {
-  let result = parseFloat(a) / parseFloat(b);
-  output.textContent = result;
-}
 function operate(operator, num1, num2) {
+  let a = parseFloat(num1);
+  let b = parseFloat(num2);
+  let result;
   switch (operator) {
     case "+":
-      add(num1, num2);
+      result = a + b;
       break;
     case "-":
-      subtract(num1, num2);
+      result = a - b;
       break;
     case "*":
-      multiply(num1, num2);
+      result = a * b;
       break;
     case "/":
-      divide(num1, num2);
+      if (b === 0) {
+        result = "Can't divide by 0!";
+        setTimeout(() => clear.click(), 1000);
+        break;
+      }
+      result = a / b;
       break;
     default:
-      console.log("Wrong operator!");
+      return;
   }
+  output.textContent = Math.round(result * 10_000) / 10_000;
 }
 
 function checkExpression(text) {
-  if (text.match(/[0-9]+[+\-*/][0-9]+/)) {
+  if (text.match(/-?\d+[+\-*/]-?\d+/)) {
     equal.click();
   }
 }
@@ -55,7 +48,9 @@ operators.forEach((operator) => {
   operator.addEventListener("click", () => {
     let text = output.textContent;
     checkExpression(text);
-    output.textContent += operator.textContent;
+    if (!text.at(-1).match(/[+\-*/\.]/)) {
+      output.textContent += operator.textContent;
+    }
   });
 });
 
@@ -68,11 +63,16 @@ numbers.forEach((number) => {
 equal.addEventListener("click", () => {
   let text = output.textContent;
 
-  let operatorMatch = text.match(/[+\-*/]/);
+  let operatorMatch = text.match(/-?\d+([+\-*/])-?\d+/);
   if (!operatorMatch) return;
-  let operator = operatorMatch[0];
+  let operator = operatorMatch[1];
 
-  let operatorIndex = text.indexOf(operator);
+  let operatorIndex = "";
+  if (operator === "-") {
+    operatorIndex = text.indexOf(operator, 1);
+  } else {
+    operatorIndex = text.indexOf(operator);
+  }
 
   let operand1 = text.substring(0, operatorIndex).trim();
   let operand2 = text.substring(operatorIndex + 1).trim();
@@ -87,5 +87,8 @@ clear.addEventListener("click", () => {
 });
 
 point.addEventListener("click", () => {
-  output.textContent += ".";
+  let text = output.textContent;
+  if (!text.at(-1).match(/[+\-*/\.]/)) {
+    output.textContent += ".";
+  }
 });
