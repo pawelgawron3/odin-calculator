@@ -100,3 +100,16 @@ point.addEventListener("click", () => {
     output.textContent += ".";
   }
 });
+
+document.addEventListener("keydown", (e) => {
+  switch (e.key) {
+    case "Backspace":
+      backspace.click();
+      break;
+    case ".":
+      point.click();
+      break;
+    default:
+      return;
+  }
+});
